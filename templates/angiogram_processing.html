@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Angiogram Processing</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 60px auto; color: #222; }
+    h1   { color: #1a4a7a; }
+    .card { background: #f5f8fc; border: 1px solid #d0dce8; border-radius: 8px;
+            padding: 32px; margin-top: 24px; }
+    label { display: block; margin-bottom: 8px; font-weight: bold; }
+    input[type=file] { width: 100%; padding: 8px; margin-bottom: 20px; }
+    button { background: #1a4a7a; color: #fff; border: none; padding: 12px 28px;
+             border-radius: 6px; font-size: 15px; cursor: pointer; }
+    button:hover { background: #14396a; }
+    .note { font-size: 13px; color: #666; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Angiogram Key-Frame Extraction</h1>
+  <div class="card">
+    <form action="/angiogram_process" method="post" enctype="multipart/form-data">
+      <label for="file">Upload Angiogram (DICOM or MP4)</label>
+      <input type="file" id="file" name="file" accept=".mp4,.dcm,*" required />
+      <button type="submit">Process Angiogram</button>
+    </form>
+    <p class="note">
+      The pipeline will automatically select the 5 most diagnostically
+      relevant frames and apply top-hat enhancement + CLAHE normalisation.
+    </p>
+  </div>
+</body>
+</html>

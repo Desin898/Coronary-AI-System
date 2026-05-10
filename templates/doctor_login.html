@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardioAI · Doctor Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #e9eff9 0%, #d8e3f0 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        .login-card {
+            max-width: 550px;
+            width: 100%;
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 30px 50px rgba(0,20,40,0.15), 0 0 0 1px rgba(255,255,255,0.6) inset;
+            animation: fadeUp 0.6s ease-out;
+        }
+        @keyframes fadeUp {
+            0%   { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .header-icon { text-align: center; margin-bottom: 1.5rem; }
+        .header-icon i {
+            font-size: 3.5rem;
+            color: #1e3c72;
+            background: rgba(255,255,255,0.5);
+            padding: 1rem;
+            border-radius: 50%;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        h2 { color: #13293e; font-weight: 600; text-align: center; margin-bottom: 0.3rem; }
+        .subhead { text-align: center; color: #4a5e7a; margin-bottom: 1rem; }
+
+        /* ── context banner (shown only when arriving from ECG result) ── */
+        .context-banner {
+            display: none;
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #d9534f;
+            border-radius: 12px;
+            padding: 10px 16px;
+            margin-bottom: 1.4rem;
+            font-size: 0.88rem;
+            color: #7d3a00;
+        }
+        .context-banner strong { color: #d9534f; }
+
+        .form-control, .form-select {
+            border-radius: 18px !important;
+            padding: 0.75rem 1.2rem !important;
+            border: 1px solid rgba(0,30,60,0.12) !important;
+            background: rgba(255,255,255,0.7) !important;
+            backdrop-filter: blur(4px);
+            font-size: 0.95rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #2a5298 !important;
+            box-shadow: 0 6px 16px rgba(42,82,152,0.2) !important;
+            background: white !important;
+        }
+        label { font-weight: 500; color: #1e3b5c; margin-bottom: 5px; margin-left: 6px; }
+        .btn-login {
+            background: linear-gradient(105deg, #0f5e4a, #1d7a63);
+            border: none;
+            border-radius: 40px;
+            padding: 14px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            box-shadow: 0 15px 25px -8px #0f2b4b;
+            transition: 0.2s;
+            width: 100%;
+        }
+        .btn-login:hover { background: linear-gradient(105deg, #0b4d3c, #166651); transform: scale(1.02); }
+        .btn-back {
+            background: rgba(30,60,90,0.5);
+            backdrop-filter: blur(6px);
+            border: none;
+            border-radius: 40px;
+            padding: 14px;
+            font-weight: 600;
+            color: white;
+            transition: 0.2s;
+            width: 100%;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+        .btn-back:hover { background: rgba(20,45,70,0.8); color: white; }
+        .button-group { display: flex; gap: 12px; margin-top: 30px; }
+        .button-group a, .button-group button { flex: 1; }
+        footer { margin-top: 20px; text-align: center; color: #5a6f8a; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <div class="header-icon">
+            <i class="fas fa-user-md"></i>
+        </div>
+        <h2>Doctor Login & Verification</h2>
+        <p class="subhead">Medical professional verification required.</p>
+
+        <!-- Shown only when arriving from a high-risk ECG result -->
+        <div class="context-banner" id="contextBanner">
+            ⚠ <strong>High Cardiac Risk detected.</strong>
+            Please verify your credentials to upload the angiogram for this patient.
+            <br><small id="contextPatientLabel"></small>
+        </div>
+
+        <div class="mb-3">
+            <label>Medical License Number:</label>
+            <input type="text" class="form-control" id="license" placeholder="Enter your medical license number">
+        </div>
+        <div class="mb-3">
+            <label>Medical Specialty:</label>
+            <select class="form-select" id="specialty">
+                <option value="" selected disabled>Select your specialty</option>
+                <option value="cardiology">Cardiology</option>
+                <option value="internal">Internal Medicine</option>
+                <option value="general">General Practice</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label>Hospital/Institution:</label>
+            <input type="text" class="form-control" id="hospital" placeholder="Enter your hospital name">
+        </div>
+        <div class="mb-3">
+            <label>Professional Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="name@hospital.org">
+        </div>
+
+        <div class="button-group">
+            <a id="backBtn" href="index.html" class="btn-back">
+                <i class="bi bi-arrow-left me-2"></i>Back
+            </a>
+            <button class="btn-login" onclick="verifyDoctor()">
+                Verify & Proceed <i class="bi bi-shield-check ms-2"></i>
+            </button>
+        </div>
+
+        <footer>
+            <i class="far fa-clock me-1"></i> AI powered Heart Health · secure verification
+        </footer>
+    </div>
+
+    <script>
+        // ── Read URL parameters ──────────────────────────────────────────
+        const params     = new URLSearchParams(window.location.search);
+        const sessionId  = params.get('session_id') || '';
+        const patientId  = params.get('patient_id') || '';
+
+        // ── If coming from an ECG result, show the context banner
+        //    and update the Back button to return to that result page ────
+        if (sessionId) {
+            const banner = document.getElementById('contextBanner');
+            banner.style.display = 'block';
+
+            if (patientId) {
+                document.getElementById('contextPatientLabel').textContent =
+                    'Patient ID: ' + patientId + '  |  Session: ' + sessionId;
+            }
+
+            document.getElementById('backBtn').href =
+                '/ecg_result/' + sessionId;
+        }
+
+        // ── Verification logic ───────────────────────────────────────────
+        function verifyDoctor() {
+            const license   = document.getElementById('license').value.trim();
+            const specialty = document.getElementById('specialty').value;
+            const hospital  = document.getElementById('hospital').value.trim();
+            const email     = document.getElementById('email').value.trim();
+
+            if (!license || !specialty || !hospital || !email) {
+                alert('Please fill in all verification fields.');
+                return;
+            }
+
+            // Persist doctor info
+            localStorage.setItem('doctorVerified', 'true');
+            localStorage.setItem('doctorInfo', JSON.stringify({
+                license, specialty, hospital, email
+            }));
+
+            // Context aware redirect ──────────────────────────────────
+            if (sessionId) {
+                // Arrived from a high-risk ECG result then go to angiogram upload
+                const dest = '/upload_angiogram'
+                    + '?session_id=' + encodeURIComponent(sessionId)
+                    + '&patient_id=' + encodeURIComponent(patientId);
+                window.location.href = dest;
+            } else {
+                // Normal doctor portal flow then original destination
+                window.location.href = 'doctor_upload.html';
+            }
+        }
+    </script>
+</body>
+</html>

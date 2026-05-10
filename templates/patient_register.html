@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardioAI · Patient Registration</title>
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: linear-gradient(145deg, #e9eff9 0%, #d8e3f0 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+        .main-container { max-width:1000px; margin:0 auto; animation:fadeUp 0.6s; }
+        @keyframes fadeUp { 0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);} }
+        .header-box {
+            text-align:center; padding:2rem; background:linear-gradient(135deg,#0b2545,#1b3a5c,#2f4e75);
+            color:white; border-radius:28px; margin-bottom:30px; box-shadow:0 20px 30px -8px rgba(0,35,70,0.4);
+        }
+        .card {
+            border-radius:32px; border:none; background:rgba(255,255,255,0.75); backdrop-filter:blur(12px);
+            box-shadow:0 30px 50px rgba(0,20,40,0.15), 0 0 0 1px rgba(255,255,255,0.6) inset;
+        }
+        .card-header {
+            background:linear-gradient(90deg,#1e3c72,#2a5298) !important;
+            color:white; border-radius:32px 32px 0 0 !important; padding:1.5rem;
+        }
+        h5 {
+            font-weight:600; margin-bottom:1.2rem; color:#13293e;
+            border-bottom:2px solid rgba(42,82,152,0.2); padding-bottom:0.5rem;
+        }
+        .form-control, .form-select {
+            border-radius:18px; border:1px solid rgba(0,30,60,0.12);
+            background:rgba(255,255,255,0.7); padding:0.75rem 1.2rem;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color:#2a5298; box-shadow:0 6px 16px rgba(42,82,152,0.2); background:white;
+        }
+        .input-icon-wrapper { position:relative; }
+        .input-icon-wrapper i {
+            position:absolute; left:18px; top:50%; transform:translateY(-50%); color:#6883a5; z-index:10;
+        }
+        .input-icon-wrapper input, .input-icon-wrapper select { padding-left:42px; }
+        .terms-container {
+            background:rgba(255,255,255,0.5); backdrop-filter:blur(4px);
+            border:1px solid rgba(42,82,152,0.2); padding:25px; border-radius:28px; margin-top:20px;
+        }
+        .terms-box {
+            max-height:240px; overflow-y:auto; background:rgba(255,255,255,0.7);
+            border:1px solid rgba(0,30,60,0.1); padding:18px; border-radius:20px;
+        }
+        .btn-primary {
+            background:linear-gradient(105deg,#1f3a6b,#2d4f89); border:none; border-radius:40px;
+            padding:12px 28px; font-weight:600; color:white; box-shadow:0 15px 25px -8px #0f2b4b;
+        }
+        .btn-primary:hover { background:linear-gradient(105deg,#17315b,#234373); transform:scale(1.02); }
+        .btn-secondary {
+            background:rgba(30,60,90,0.5); backdrop-filter:blur(6px); border:none; border-radius:40px;
+            padding:12px 28px; color:white;
+        }
+        .btn-secondary:hover { background:rgba(20,45,70,0.8); }
+        a { color:#1e3c72; font-weight:500; text-decoration:none; }
+        footer { text-align:center; margin-top:30px; color:#4a5e7a; }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-box">
+            <h3><i class="fas fa-user-plus me-2"></i>Patient Registration</h3>
+            <p class="mb-0"><i class="fas fa-shield-alt me-2"></i>Secure sign‑up – AI powered Heart Health</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header text-white text-center">
+                <h4 class="mb-0"><i class="bi bi-person-plus me-2"></i>Create Account</h4>
+            </div>
+            <div class="card-body">
+                <form id="registrationForm">
+                    <!-- Personal Information -->
+                    <h5><i class="fas fa-user-circle me-2"></i>Personal Information</h5>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Full Name *</label>
+                            <div class="input-icon-wrapper"><i class="fas fa-user"></i><input type="text" class="form-control" id="name" placeholder="Enter your full name" required></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Email Address *</label>
+                            <div class="input-icon-wrapper"><i class="fas fa-envelope"></i><input type="email" class="form-control" id="email" placeholder="name@example.com" required></div>
+                        </div>
+                    </div>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Age</label>
+                            <div class="input-icon-wrapper"><i class="fas fa-calendar-alt"></i><input type="number" class="form-control" id="age" min="18" max="100" placeholder="Years"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Gender</label>
+                            <div class="input-icon-wrapper"><i class="fas fa-venus-mars"></i>
+                                <select class="form-select" id="gender">
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Phone Number</label>
+                        <div class="input-icon-wrapper"><i class="fas fa-phone-alt"></i><input type="tel" class="form-control" id="phone" placeholder="+1 234 567 890"></div>
+                    </div>
+
+                    <!-- Account Security -->
+                    <h5 class="mt-5"><i class="fas fa-lock me-2"></i>Account Security</h5>
+                    <div class="row g-4 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Password *</label>
+                            <div class="input-icon-wrapper"><i class="fas fa-key"></i><input type="password" class="form-control" id="password" minlength="6" placeholder="Create a password" required></div>
+                            <div class="form-text"><i class="bi bi-info-circle"></i> Minimum 6 characters</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Confirm Password *</label>
+                            <div class="input-icon-wrapper"><i class="fas fa-key"></i><input type="password" class="form-control" id="confirm_password" placeholder="Re-enter password" required></div>
+                        </div>
+                    </div>
+
+                    <!-- Terms -->
+                    <div class="terms-container">
+                        <h5><i class="bi bi-shield-check me-2"></i>Terms & Medical Disclaimer</h5>
+                        <div class="terms-box mb-3">
+                            <p><strong>Medical Advisory Notice:</strong><br>
+                            This Coronary Artery Disease Prediction and Recommendation System provides AI-based
+                            risk predictions and general health recommendations based on uploaded ECG data and
+                            user-provided information. The results are for informational and advisory purposes only
+                            and DO NOT constitute medical diagnosis, treatment, or professional medical advice.</p>
+
+                            <p>Users must consult a qualified medical professional or cardiologist before making
+                            any medical decisions based on the system’s output.</p>
+
+                            <p><strong>No Emergency Use:</strong><br>
+                            This system must not be used for medical emergencies.</p>
+
+                            <p><strong>Accuracy Disclaimer:</strong><br>
+                            Predictions are probabilistic in nature and not guaranteed 100% accurate.</p>
+
+                            <p><strong>Data Privacy & Security:</strong><br>
+                            Your uploaded ECG files and personal information are encrypted and securely stored.</p>
+                        </div>
+
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">I have read and understood the Medical Disclaimer and agree.</label>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-flex justify-content-end gap-3 mt-5">
+                        <a href="index.html" class="btn btn-secondary px-4"><i class="bi bi-x-circle me-2"></i>Cancel</a>
+                        <button type="submit" class="btn btn-primary px-4" id="registerBtn"><i class="bi bi-person-plus me-2"></i>Create Account</button>
+                    </div>
+                </form>
+                <div class="mt-4 text-center">
+                    <p>Already have an account? <a href="patient_login.html" class="fw-semibold">Login here <i class="bi bi-arrow-right-short"></i></a></p>
+                </div>
+            </div>
+        </div>
+        <footer><i class="far fa-clock me-1"></i> AI powered Heart Health</footer>
+    </div>
+
+    <script>
+        (function() {
+            const form = document.getElementById('registrationForm');
+            const password = document.getElementById('password');
+            const confirm = document.getElementById('confirm_password');
+            const terms = document.getElementById('terms');
+            const registerBtn = document.getElementById('registerBtn');
+
+            // Password match check
+            function checkPasswords() {
+                if (password.value !== confirm.value) {
+                    confirm.setCustomValidity('Passwords must match');
+                } else {
+                    confirm.setCustomValidity('');
+                }
+            }
+            password.addEventListener('input', checkPasswords);
+            confirm.addEventListener('input', checkPasswords);
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Basic validation
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const age = document.getElementById('age').value;
+                const gender = document.getElementById('gender').value;
+                const phone = document.getElementById('phone').value.trim();
+                const pwd = password.value;
+                const pwdConfirm = confirm.value;
+
+                if (!name || !email || !pwd || !pwdConfirm) {
+                    alert('Please fill all required fields.');
+                    return;
+                }
+                if (pwd !== pwdConfirm) {
+                    alert('Passwords do not match.');
+                    return;
+                }
+                if (!terms.checked) {
+                    alert('You must accept the terms.');
+                    return;
+                }
+
+                // Load existing users from localStorage
+                let users = [];
+                try {
+                    users = JSON.parse(localStorage.getItem('users')) || [];
+                } catch (e) {
+                    users = [];
+                }
+
+                // Check if email already registered
+                const existing = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+                if (existing) {
+                    alert('An account with this email already exists. Please login.');
+                    return;
+                }
+
+                // Create new user object
+                const newUser = {
+                    name: name,
+                    email: email,
+                    password: pwd, // In a real app, hash the password; for demo we store as-is
+                    age: age || null,
+                    gender: gender || null,
+                    phone: phone || null,
+                    registered: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // Simulate loading and redirect
+                registerBtn.innerHTML = '<i class="fas fa-spinner fa-pulse me-2"></i>Creating...';
+                registerBtn.disabled = true;
+
+                setTimeout(() => {
+                    alert('Registration successful! Please login.');
+                    window.location.href = 'patient_login.html';
+                }, 1000);
+            });
+        })();
+    </script>
+</body>
+</html>
+powered

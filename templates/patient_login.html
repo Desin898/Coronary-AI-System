@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardioAI · Patient Login</title>
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #e9eff9 0%, #d8e3f0 100%);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .login-wrapper {
+            max-width: 500px;
+            width: 100%;
+            animation: fadeUp 0.6s ease-out;
+        }
+
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* header box  */
+        .header-box {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #0b2545, #1b3a5c, #2f4e75);
+            color: white;
+            border-radius: 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 30px -8px rgba(0, 35, 70, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-box::after {
+            content: '';
+            position: absolute;
+            top: -30%;
+            left: -20%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .header-box h3 {
+            font-weight: 700;
+            font-size: 2.2rem;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .header-box p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        /* glass card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 2.5rem;
+            box-shadow: 0 30px 50px rgba(0, 20, 40, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+        }
+
+        /* form controls with icons */
+        .form-control, .form-select {
+            border-radius: 18px !important;
+            padding: 0.75rem 1.2rem !important;
+            border: 1px solid rgba(0, 30, 60, 0.12) !important;
+            background: rgba(255,255,255,0.7) !important;
+            backdrop-filter: blur(4px);
+            font-size: 0.95rem !important;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #2a5298 !important;
+            box-shadow: 0 6px 16px rgba(42, 82, 152, 0.2) !important;
+            background: white !important;
+        }
+
+        .input-icon-wrapper {
+            position: relative;
+        }
+
+        .input-icon-wrapper i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6883a5;
+            font-size: 1rem;
+            z-index: 10;
+        }
+
+        .input-icon-wrapper input, .input-icon-wrapper select {
+            padding-left: 42px !important;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #1e3b5c;
+            margin-bottom: 6px;
+            margin-left: 6px;
+        }
+
+        .btn-login {
+            background: linear-gradient(105deg, #1f3a6b, #2d4f89);
+            border: none;
+            border-radius: 40px !important;
+            padding: 14px !important;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            box-shadow: 0 15px 25px -8px #0f2b4b;
+            transition: 0.2s;
+            width: 100%;
+        }
+
+        .btn-login:hover {
+            background: linear-gradient(105deg, #17315b, #234373);
+            transform: scale(1.02);
+        }
+
+        .btn-outline-primary {
+            border-radius: 40px !important;
+            padding: 12px !important;
+            font-weight: 600;
+            border: 2px solid #2a5298;
+            color: #1e3c72;
+            background: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background: #2a5298;
+            color: white;
+        }
+
+        .footer-links {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .footer-links a {
+            color: #1e3c72;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #4a5e7a;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <!-- same header as screening page -->
+        <div class="header-box">
+            <h3><i class="fas fa-sign-in-alt me-2"></i>Patient Login</h3>
+            <p class="mb-0"><i class="fas fa-shield-alt me-2"></i>Access your secure dashboard</p>
+        </div>
+
+        <!-- glass card -->
+        <div class="glass-card">
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label class="form-label">Email Address</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Password</label>
+                    <div class="input-icon-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+                    </div>
+                </div>
+                <div class="mb-4 form-check">
+                    <input type="checkbox" class="form-check-input" id="remember">
+                    <label class="form-check-label" for="remember">Remember me</label>
+                </div>
+                <button type="submit" class="btn-login" id="loginBtn">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                </button>
+            </form>
+
+            <div class="footer-links">
+                <p class="mb-2">Don't have an account?</p>
+                <a href="patient_register.html" class="btn btn-outline-primary w-100 mb-3">
+                    <i class="bi bi-person-plus me-2"></i>Register as Patient
+                </a>
+                <div>
+                    <a href="index.html"><i class="bi bi-arrow-left me-1"></i>Back to Home</a>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <i class="far fa-clock me-1"></i> AI powered Heart Health
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                alert('Please enter both email and password.');
+                return;
+            }
+
+            // Load users from localStorage
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+
+            if (!user) {
+                alert('Invalid email or password.');
+                return;
+            }
+
+            // Set current user session
+            localStorage.setItem('currentUser', JSON.stringify({ email: user.email, name: user.name }));
+
+            // Show loading
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-pulse me-2"></i>Logging in...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                window.location.href = 'patient_dashboard.html';
+            }, 800);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Assessment</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .question { margin: 20px 0; }
+        .options { display: flex; flex-direction: column; gap: 10px; margin: 10px 0 20px 0; }
+        .option { padding: 10px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
+        .option.selected { background: #3498db; color: white; border-color: #3498db; }
+        .button-group { display: flex; justify-content: space-between; margin-top: 30px; }
+        button { padding: 12px 24px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
+        .submit-btn { background: #3498db; color: white; }
+        .back-btn { background: #95a5a6; color: white; }
+        .result { display: none; margin-top: 20px; padding: 20px; border-radius: 5px; }
+        .risk-high { background: #ffeaa7; border: 2px solid #fdcb6e; }
+        .risk-low { background: #d1f7c4; border: 2px solid #2ecc71; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Coronary Disease Risk Assessment</h1>
+        <p>Please answer the following questions to assess your risk factors for coronary artery disease.</p>
+        
+        <div class="question">
+            <h3>1. Do you experience chest pain or discomfort?</h3>
+            <div class="options">
+                <div class="option" onclick="selectOption(this)">No chest pain</div>
+                <div class="option" onclick="selectOption(this)">Occasional mild discomfort</div>
+                <div class="option" onclick="selectOption(this)">Frequent chest pain</div>
+                <div class="option" onclick="selectOption(this)">Severe chest pain</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>2. Do you experience shortness of breath?</h3>
+            <div class="options">
+                <div class="option" onclick="selectOption(this)">Only during intense exercise</div>
+                <div class="option" onclick="selectOption(this)">During normal activities</div>
+                <div class="option" onclick="selectOption(this)">Even at rest</div>
+                <div class="option" onclick="selectOption(this)">No shortness of breath</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>3. Do you have a family history of heart disease?</h3>
+            <div class="options">
+                <div class="option" onclick="selectOption(this)">No family history</div>
+                <div class="option" onclick="selectOption(this)">One relative affected</div>
+                <div class="option" onclick="selectOption(this)">Multiple relatives affected</div>
+                <div class="option" onclick="selectOption(this)">Don't know</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>4. Do you smoke?</h3>
+            <div class="options">
+                <div class="option" onclick="selectOption(this)">Never smoked</div>
+                <div class="option" onclick="selectOption(this)">Former smoker</div>
+                <div class="option" onclick="selectOption(this)">Occasional smoker</div>
+                <div class="option" onclick="selectOption(this)">Regular smoker</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>5. Do you consume alcohol?</h3>
+            <div class="options">
+                <div class="option" onclick="selectOption(this)">Never</div>
+                <div class="option" onclick="selectOption(this)">Occasionally (1-2 drinks/week)</div>
+                <div class="option" onclick="selectOption(this)">Moderately (3-7 drinks/week)</div>
+                <div class="option" onclick="selectOption(this)">Regularly (8+ drinks/week)</div>
+            </div>
+        </div>
+
+        <div class="question">
+            <h3>6. How often do you exercise?</h3>
+            <div class="options">
+                <div class="option" onclick="selectOption(this)">Daily</div>
+                <div class="option" onclick="selectOption(this)">3-5 times per week</div>
+                <div class="option" onclick="selectOption(this)">Occasionally</div>
+                <div class="option" onclick="selectOption(this)">Rarely or never</div>
+            </div>
+        </div>
+
+        <div id="result" class="result">
+            <h2>Assessment Result</h2>
+            <p id="result-text"></p>
+            <div id="ecg-upload-section" style="display: none; margin-top: 20px;">
+                <h3>ECG Upload</h3>
+                <p>Please upload your ECG report for AI analysis:</p>
+                <input type="file" id="ecg-upload" accept=".pdf,.jpg,.jpeg,.png,.dicom">
+                <button onclick="uploadECG()" style="margin-top: 10px;">Upload and Analyze</button>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                Back to Home
+            </button>
+            <button class="submit-btn" onclick="calculateRisk()">
+                Submit Assessment
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function selectOption(element) {
+            // Clear previous selection in this question
+            const parent = element.parentElement;
+            parent.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            // Select current option
+            element.classList.add('selected');
+        }
+
+        function calculateRisk() {
+            // Simple risk calculation based on selections
+            const selectedOptions = document.querySelectorAll('.option.selected');
+            
+            // Count high-risk selections
+            let riskScore = 0;
+            selectedOptions.forEach(option => {
+                const text = option.textContent;
+                if (text.includes('Severe') || text.includes('frequent') || 
+                    text.includes('Multiple relatives') || text.includes('Regular smoker') ||
+                    text.includes('Regularly (8+)') || text.includes('Rarely or never')) {
+                    riskScore += 2;
+                } else if (text.includes('Moderately') || text.includes('Occasional') || 
+                          text.includes('One relative')) {
+                    riskScore += 1;
+                }
+            });
+
+            const resultDiv = document.getElementById('result');
+            const resultText = document.getElementById('result-text');
+            const ecgSection = document.getElementById('ecg-upload-section');
+
+            if (riskScore >= 3) {
+                resultDiv.className = 'result risk-high';
+                resultText.innerHTML = `
+                    <strong>Higher Risk Detected</strong><br><br>
+                    Based on your responses, you may be at increased risk for coronary artery disease.<br><br>
+                    <strong>Recommendation:</strong> We recommend getting an ECG test for further evaluation.
+                `;
+                ecgSection.style.display = 'block';
+            } else {
+                resultDiv.className = 'result risk-low';
+                resultText.innerHTML = `
+                    <strong>Lower Risk Profile</strong><br><br>
+                    Based on your responses, your risk factors appear to be lower.<br><br>
+                    <strong>Recommendation:</strong> Continue maintaining a healthy lifestyle. 
+                    If you experience any symptoms, consult with a healthcare provider.
+                `;
+                ecgSection.style.display = 'none';
+            }
+
+            resultDiv.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        function uploadECG() {
+            const fileInput = document.getElementById('ecg-upload');
+            if (fileInput.files.length > 0) {
+                alert('ECG uploaded successfully! Our AI system will analyze your report and provide results within 24 hours.');
+                // In a real system, you would upload to a server here
+            } else {
+                alert('Please select an ECG file to upload.');
+            }
+        }
+    </script>
+</body>
+</html>

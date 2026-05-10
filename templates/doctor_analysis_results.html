@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardioAI · ECG Analysis Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: linear-gradient(145deg, #e9eff9 0%, #d8e3f0 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 1.5rem;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header-box {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #0b2545, #1b3a5c, #2f4e75);
+            color: white;
+            border-radius: 28px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 30px -8px rgba(0,35,70,0.4);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: none;
+            box-shadow: 0 30px 50px rgba(0,20,40,0.15), 0 0 0 1px rgba(255,255,255,0.6) inset;
+            overflow: hidden;
+            margin-bottom: 1.8rem;
+        }
+        .card-header-custom {
+            background: rgba(255,255,255,0.5);
+            border-bottom: 1px solid rgba(42,82,152,0.2);
+            padding: 1.2rem 1.8rem;
+            font-weight: 600;
+            color: #13293e;
+        }
+        .risk-percentage {
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        .badge-risk-custom {
+            border-radius: 40px;
+            padding: 0.5rem 1.2rem;
+            font-weight: 600;
+        }
+        .progress-bar-risk {
+            background: linear-gradient(90deg, #2a5298, #4a7db0);
+            border-radius: 30px;
+        }
+        .btn-primary, .btn-success, .btn-secondary {
+            border-radius: 40px !important;
+            padding: 12px 24px !important;
+            font-weight: 600;
+            border: none;
+        }
+        .btn-primary { background: linear-gradient(105deg, #1f3a6b, #2d4f89); }
+        .btn-success { background: linear-gradient(105deg, #0f5e4a, #1d7a63); }
+        .btn-secondary { background: rgba(30,60,90,0.5); backdrop-filter: blur(6px); }
+        .table-custom {
+            background: rgba(255,255,255,0.5);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+        .table-custom th, .table-custom td {
+            background: transparent !important;
+            border-bottom: 1px solid rgba(42,82,152,0.1);
+        }
+        .form-control, .form-select {
+            border-radius: 20px !important;
+            background: rgba(255,255,255,0.7) !important;
+            border: 1px solid rgba(0,30,60,0.12) !important;
+            padding: 0.75rem 1.2rem !important;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #2a5298 !important;
+            box-shadow: 0 6px 16px rgba(42,82,152,0.2) !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header-box">
+            <h3><i class="fas fa-heartbeat me-2"></i>ECG Analysis Results</h3>
+            <p class="mb-0">AI-powered interpretation & clinical recommendations</p>
+        </div>
+
+        <!-- Dummy analysis data (matching template structure) -->
+        <div class="glass-card">
+            <div class="card-header-custom bg-primary text-white" style="background: linear-gradient(90deg,#1e3c72,#2a5298) !important;">
+                <h4 class="mb-0"><i class="bi bi-heart-pulse me-2"></i> ECG Analysis Results</h4>
+            </div>
+            <div class="card-body p-4">
+                <!-- Success alert -->
+                <div class="alert alert-success bg-white border-0 border-start border-4 border-success rounded-4 d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill fs-3 me-3 text-success"></i>
+                    <div>
+                        <h5 class="alert-heading">Analysis Complete!</h5>
+                        <p class="mb-0">ECG file "patient_ecg_001.pdf" has been analyzed by our AI system.</p>
+                    </div>
+                </div>
+
+                <!-- Patient Info -->
+                <div class="glass-card mb-4">
+                    <div class="card-header-custom">
+                        <i class="bi bi-person-badge me-2"></i>Patient Information
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Patient:</strong> John Doe</p>
+                                <p><strong>Analyzed By:</strong> Dr. Sarah Chen</p>
+                                <p><strong>License:</strong> MD-12345</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Analysis Date:</strong> March 1, 2026</p>
+                                <p><strong>File Type:</strong> ECG Recording</p>
+                                <p><strong>AI Model:</strong> 1D CNN + XGBoost Ensemble</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Assessment -->
+                <div class="glass-card mb-4">
+                    <div class="card-header-custom">
+                        <i class="bi bi-graph-up me-2"></i>AI Risk Assessment
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 text-center">
+                                <div class="risk-percentage text-danger">78%</div>
+                                <h4 class="mt-2">HIGH RISK</h4>
+                                <span class="badge bg-danger badge-risk-custom mt-2">Confidence: 92%</span>
+                            </div>
+                            <div class="col-md-8">
+                                <h5>Key Findings:</h5>
+                                <div class="progress mb-3" style="height: 25px; border-radius: 30px;">
+                                    <div class="progress-bar progress-bar-risk" style="width:78%">78% Risk Level</div>
+                                </div>
+                                <h6 class="mt-4">Detected Risk Factors:</h6>
+                                <div class="row">
+                                    <div class="col-md-6"><div class="alert alert-warning py-2 mb-2 rounded-4"><i class="bi bi-exclamation-triangle me-2"></i>ST elevation in leads V2-V4</div></div>
+                                    <div class="col-md-6"><div class="alert alert-warning py-2 mb-2 rounded-4"><i class="bi bi-exclamation-triangle me-2"></i>T wave inversion</div></div>
+                                    <div class="col-md-6"><div class="alert alert-warning py-2 mb-2 rounded-4"><i class="bi bi-exclamation-triangle me-2"></i>Prolonged QTc interval</div></div>
+                                    <div class="col-md-6"><div class="alert alert-warning py-2 mb-2 rounded-4"><i class="bi bi-exclamation-triangle me-2"></i>Pathological Q waves</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recommendations Table -->
+                <div class="glass-card mb-4">
+                    <div class="card-header-custom">
+                        <i class="bi bi-robot me-2"></i>AI Clinical Recommendations
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-custom mb-0">
+                                <thead>
+                                    <tr><th>Priority</th><th>Type</th><th>Recommendation</th><th>Details</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><span class="badge bg-danger rounded-pill">Critical</span></td><td>Medication</td><td>Start antiplatelet therapy</td><td>Clopidogrel 75mg daily</td></tr>
+                                    <tr><td><span class="badge bg-warning rounded-pill">High</span></td><td>Imaging</td><td>Echocardiogram</td><td>Assess wall motion abnormalities</td></tr>
+                                    <tr><td><span class="badge bg-info rounded-pill">Medium</span></td><td>Lifestyle</td><td>Cardiac rehab</td><td>Supervised exercise program</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Doctor's Notes -->
+                <div class="glass-card">
+                    <div class="card-header-custom">
+                        <i class="bi bi-pencil-square me-2"></i>Doctor's Notes & Actions
+                    </div>
+                    <div class="card-body">
+                        <form id="doctorNotesForm">
+                            <div class="mb-3">
+                                <label class="form-label">Clinical Notes</label>
+                                <textarea class="form-control" rows="4" placeholder="Add your clinical observations and notes..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Treatment Plan</label>
+                                <select class="form-select" multiple>
+                                    <option value="medication">Medication Management</option>
+                                    <option value="lifestyle">Lifestyle Modification</option>
+                                    <option value="angiogram">Coronary Angiogram Recommended</option>
+                                    <option value="pci">PCI (Stenting) Considered</option>
+                                </select>
+                                <div class="form-text">Hold Ctrl/Cmd to select multiple</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Follow-up Date</label>
+                                <input type="date" class="form-control" min="2026-03-01">
+                            </div>
+                            <div class="d-flex gap-2 justify-content-end">
+                                <button type="button" class="btn btn-secondary" onclick="saveAsDraft()"><i class="bi bi-save me-2"></i>Save Draft</button>
+                                <button type="button" class="btn btn-success" onclick="generatePrescription()"><i class="bi bi-prescription me-2"></i>Prescription</button>
+                                <button type="button" class="btn btn-primary" onclick="finalizeReport()"><i class="bi bi-check-circle me-2"></i>Finalize</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Footer buttons -->
+                <div class="d-flex gap-3 justify-content-end mt-4">
+                    <a href="doctor_dashboard.html" class="btn btn-secondary"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+                    <a href="doctor_upload.html" class="btn btn-primary"><i class="bi bi-plus-circle me-2"></i>New Analysis</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function saveAsDraft() { alert('Clinical notes saved as draft.'); }
+        function generatePrescription() {
+            alert('PRESCRIPTION\n\nPatient: John Doe\nDate: 3/1/2026\nRisk Level: HIGH RISK\n\nMedications:\nAtorvastatin 40mg\nAspirin 81mg\nClopidogrel 75mg\nMetoprolol 25mg\n\nDoctor: Dr. Sarah Chen\nLicense: MD-12345');
+        }
+        function finalizeReport() {
+            if (confirm('Finalize this report? This action cannot be undone.')) {
+                setTimeout(() => { alert('Report finalized!'); window.location.href = 'doctor_dashboard.html'; }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

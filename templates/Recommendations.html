@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CardioAI · Full Personalised Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background: linear-gradient(145deg, #e9eff9 0%, #d8e3f0 100%);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 1.5rem 1rem 3rem;
+    }
+    .main-container { max-width: 1000px; margin: 0 auto; }
+
+    /* Header */
+    .header-card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(14px);
+      border-radius: 28px;
+      padding: 1.8rem 2rem;
+      margin-bottom: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .header-card .icon-wrap {
+      width: 56px; height: 56px;
+      background: linear-gradient(135deg, #1f3a6b, #2d4f89);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-card .icon-wrap i { color: #fff; font-size: 1.4rem; }
+    .header-card h3 { margin: 0; color: #13293e; font-weight: 700; }
+    .header-card p { margin: 4px 0 0; color: #6c757d; font-size: 0.88rem; }
+
+    /* Common card style */
+    .glass-card {
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(10px);
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.4);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .section-title {
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #1f3a6b;
+      margin-bottom: 1rem;
+      border-left: 4px solid #2a5298;
+      padding-left: 0.8rem;
+    }
+
+    /* Risk badge */
+    .risk-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .risk-low { background: #d1e7dd; color: #0a3622; }
+    .risk-high { background: #f8d7da; color: #842029; }
+    .risk-percent { font-size: 1.6rem; font-weight: 800; color: #13293e; }
+
+    /* SHAP / graph grid */
+    .two-columns {
+      display: flex;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+    .two-columns > * { flex: 1 1 240px; }
+
+    .factor-item, .graph-item {
+      background: rgba(255,255,255,0.5);
+      border-radius: 16px;
+      padding: 0.6rem 1rem;
+      margin-bottom: 0.6rem;
+    }
+    .factor-name { font-weight: 700; color: #1f3a6b; }
+    .impact-positive { color: #dc3545; }
+    .impact-negative { color: #198754; }
+    .graph-value { font-weight: 700; color: #2a5298; }
+
+    /* Recommendation cards */
+    .rec-card {
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      margin-bottom: 1.2rem;
+      overflow: hidden;
+      transition: transform 0.18s ease;
+      border-left: 5px solid;
+    }
+    .rec-card:hover { transform: translateY(-2px); }
+    .rec-card-header {
+      padding: 1.2rem 1.5rem 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+    .rec-icon-wrap {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rec-icon-wrap i { font-size: 1.2rem; }
+    .rec-title { font-weight: 700; color: #13293e; margin: 0; }
+    .rec-card-body { padding: 0 1.5rem 1.4rem; }
+    .rec-advice { color: #444; font-size: 0.92rem; line-height: 1.6; margin-bottom: 1rem; }
+    .rec-actions-title {
+      font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+      color: #8a9ab5; margin-bottom: 0.55rem;
+    }
+    .rec-action-list {
+      list-style: none; padding: 0; margin: 0;
+    }
+    .rec-action-list li {
+      display: flex; align-items: flex-start; gap: 0.6rem;
+      padding: 0.35rem 0; font-size: 0.88rem;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .rec-action-list li:last-child { border-bottom: none; }
+    .bullet {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .bullet i { font-size: 0.65rem; color: #fff; }
+
+    /* colour styles for recommendation icons and bullets */
+    .rec-icon-wrap.success-bg { background: rgba(25,135,84,0.12); }
+    .rec-icon-wrap.success-bg i { color: #198754; }
+    .bullet.success-bullet { background: #198754; }
+
+    .rec-icon-wrap.danger-bg { background: rgba(220,53,69,0.12); }
+    .rec-icon-wrap.danger-bg i { color: #dc3545; }
+    .bullet.danger-bullet { background: #dc3545; }
+
+    .rec-icon-wrap.warning-bg { background: rgba(253,126,20,0.12); }
+    .rec-icon-wrap.warning-bg i { color: #fd7e14; }
+    .bullet.warning-bullet { background: #fd7e14; }
+
+    .rec-icon-wrap.info-bg { background: rgba(13,202,240,0.12); }
+    .rec-icon-wrap.info-bg i { color: #0dcaf0; }
+    .bullet.info-bullet { background: #0dcaf0; }
+
+    .rec-icon-wrap.primary-bg { background: rgba(42,82,152,0.12); }
+    .rec-icon-wrap.primary-bg i { color: #2a5298; }
+    .bullet.primary-bullet { background: #2a5298; }
+
+    /* Navigation */
+    .bottom-nav {
+      display: flex; gap: 0.75rem; flex-wrap: wrap;
+      justify-content: center; margin-top: 1.8rem;
+    }
+    .btn-outline-navy {
+      border-radius: 40px; border: 2px solid #2a5298; color: #2a5298;
+      background: transparent; font-weight: 600; padding: 10px 26px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .btn-outline-navy:hover { background: #2a5298; color: #fff; }
+    .btn-navy {
+      border-radius: 40px; background: linear-gradient(105deg, #1f3a6b, #2d4f89);
+      border: none; color: #fff; font-weight: 600; padding: 10px 26px;
+      text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;
+    }
+    .disclaimer {
+      background: rgba(255,255,255,0.5); border-radius: 14px;
+      padding: 1rem 1.2rem; margin-top: 0.4rem;
+      font-size: 0.78rem; color: #6c757d;
+    }
+    .state-card {
+      background: rgba(255,255,255,0.82); backdrop-filter: blur(14px);
+      border-radius: 28px; padding: 3rem 2rem; text-align: center;
+    }
+    .spinner-ring {
+      width: 52px; height: 52px; border: 5px solid rgba(42,82,152,0.15);
+      border-top-color: #2a5298; border-radius: 50%;
+      animation: spin 0.85s linear infinite; margin: 0 auto 1.2rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  <div class="header-card">
+    <div class="icon-wrap"><i class="fas fa-clipboard-list"></i></div>
+    <div>
+      <h3>Personalised Health Report</h3>
+      <p id="headerSubtitle">Full AI‑powered analysis: risk, graph features, SHAP factors & recommendations</p>
+    </div>
+  </div>
+  <div id="pageContent">
+    <div class="state-card">
+      <div class="spinner-ring"></div>
+      <p class="text-muted mb-0">Loading your comprehensive report…</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Helper map colour name to CSS classes
+function getIconBgClass(colour) {
+  const map = { success: 'success-bg', danger: 'danger-bg', warning: 'warning-bg', info: 'info-bg', primary: 'primary-bg' };
+  return map[colour] || 'primary-bg';
+}
+function getBulletClass(colour) {
+  const map = { success: 'success-bullet', danger: 'danger-bullet', warning: 'warning-bullet', info: 'info-bullet', primary: 'primary-bullet' };
+  return map[colour] || 'primary-bullet';
+}
+function getBorderColour(colour) {
+  const map = { success: '#198754', danger: '#dc3545', warning: '#fd7e14', info: '#0dcaf0', primary: '#2a5298' };
+  return map[colour] || '#2a5298';
+}
+
+// Render risk section
+function renderRisk(risk) {
+  if (!risk) return '';
+  const pct = risk.risk_percentage !== undefined ? risk.risk_percentage : (risk.risk_probability * 100).toFixed(1);
+  const riskClass = (risk.risk_class === 'HIGH_RISK') ? 'high' : 'low';
+  const badgeClass = riskClass === 'high' ? 'risk-high' : 'risk-low';
+  const badgeText = risk.risk_class === 'HIGH_RISK' ? 'High Risk' : 'Low Risk';
+  return `
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-heartbeat me-2"></i> Cardiovascular Risk Assessment</div>
+      <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div>
+          <span class="risk-badge ${badgeClass}">${badgeText}</span>
+          <div class="mt-2"><span class="risk-percent">${pct}%</span> <span class="text-muted">estimated risk probability</span></div>
+        </div>
+        <div class="text-muted small">Model confidence integrated with graph‑augmented features</div>
+      </div>
+    </div>
+  `;
+}
+
+// SHAP top factors
+function renderShapFactors(factors) {
+  if (!factors || factors.length === 0) return '';
+  const items = factors.map(f => {
+    const impactClass = f.direction === 'increases' ? 'impact-positive' : 'impact-negative';
+    const arrow = f.direction === 'increases' ? '↑' : '↓';
+    return `
+      <div class="factor-item">
+        <div class="factor-name">${escapeHtml(f.feature)}</div>
+        <div><span class="${impactClass}">${arrow} ${Math.abs(f.impact).toFixed(3)}</span> &nbsp;| value: ${escapeHtml(String(f.value))}</div>
+        <small class="text-muted">${f.direction} risk</small>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-chart-line me-2"></i> Top Contributing Factors (SHAP)</div>
+      <div class="two-columns"><div>${items}</div></div>
+      <div class="text-muted small mt-2">*Positive impact = increases risk, negative = lowers risk</div>
+    </div>
+  `;
+}
+
+// graph features
+function renderGraphFeatures(graph) {
+  if (!graph) return '';
+  return `
+    <div class="glass-card">
+      <div class="section-title"><i class="fas fa-project-diagram me-2"></i> Graph‑Based Augmented Features</div>
+      <div class="two-columns">
+        <div class="graph-item"><span class="factor-name">Degree centrality</span><br><span class="graph-value">${graph.degree ?? 'N/A'}</span> <small class="text-muted">(neighbour connectivity)</small></div>
+        <div class="graph-item"><span class="factor-name">Clustering coefficient</span><br><span class="graph-value">${graph.clustering ?? 'N/A'}</span> <small class="text-muted">(local group density)</small></div>
+        <div class="graph-item"><span class="factor-name">Community membership</span><br><span class="graph-value">${graph.community ?? 'N/A'}</span> <small class="text-muted">(patient cohort)</small></div>
+      </div>
+      <div class="text-muted small mt-2">These features are derived from a KNN graph of similar patients in the training population.</div>
+    </div>
+  `;
+}
+
+// recommendation cards
+function buildRecCard(rec) {
+  const colour = rec.colour || 'primary';
+  const iconBgClass = getIconBgClass(colour);
+  const bulletClass = getBulletClass(colour);
+  const borderColour = getBorderColour(colour);
+  const actions = (rec.actions || []).map(a => `
+    <li>
+      <span class="bullet ${bulletClass}"><i class="fas fa-check"></i></span>
+      <span>${escapeHtml(a)}</span>
+    </li>
+  `).join('');
+  return `
+    <div class="rec-card" style="border-left-color: ${borderColour};">
+      <div class="rec-card-header">
+        <div class="rec-icon-wrap ${iconBgClass}">
+          <i class="${rec.icon || 'fas fa-heart'}"></i>
+        </div>
+        <h5 class="rec-title">${escapeHtml(rec.title || rec.category)}</h5>
+      </div>
+      <div class="rec-card-body">
+        <p class="rec-advice">${escapeHtml(rec.advice || '')}</p>
+        <div class="rec-actions-title">Recommended actions</div>
+        <ul class="rec-action-list">${actions}</ul>
+        ${rec.rationale ? `<div class="mt-2 small text-muted"><i class="fas fa-comment-dots"></i> ${escapeHtml(rec.rationale)}</div>` : ''}
+        ${rec.probability ? `<div class="mt-1 small text-muted">Model confidence: ${(rec.probability * 100).toFixed(1)}%</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function renderRecommendations(recs) {
+  if (!recs || recs.length === 0) return '<div class="glass-card text-center">No specific recommendations generated.</div>';
+  const cards = recs.map(buildRecCard).join('');
+  return `
+    <div class="glass-card" style="padding-bottom:0.5rem;">
+      <div class="section-title"><i class="fas fa-list-check me-2"></i> Personalised Recommendations (${recs.length})</div>
+    </div>
+    ${cards}
+  `;
+}
+
+// full page
+function renderFullReport(data) {
+  const riskHtml = renderRisk(data.risk_assessment);
+  const shapHtml = renderShapFactors(data.shap_top_factors);
+  const graphHtml = renderGraphFeatures(data.graph_features);
+  const recHtml = renderRecommendations(data.recommendations);
+  const disclaimer = `
+    <div class="disclaimer">
+      <strong>Clinical disclaimer:</strong> This report is generated by a machine‑learning system and is intended for
+      educational and screening purposes only. It does not replace professional medical advice.
+      Always consult a qualified healthcare provider before making health decisions.
+    </div>
+  `;
+  const fullHtml = riskHtml + shapHtml + graphHtml + recHtml + disclaimer;
+  document.getElementById('pageContent').innerHTML = fullHtml;
+  renderNav();
+}
+
+// Navigation
+function renderNav() {
+  const source = '{{ source }}';
+  const sessionId = '{{ session_id }}';
+  let backHref = '/', backLabel = 'New Screening', backIcon = 'fas fa-redo';
+  if (source === 'ecg' && sessionId) {
+    backHref = `/ecg_result/${sessionId}`;
+    backLabel = 'Back to ECG Results';
+    backIcon = 'fas fa-arrow-left';
+  } else if (source === 'screening') {
+    backHref = '/pre_screening_results.html';
+    backLabel = 'Back to Screening Results';
+    backIcon = 'fas fa-arrow-left';
+  }
+  const navHtml = `
+    <div class="bottom-nav">
+      <a href="${backHref}" class="btn-outline-navy"><i class="${backIcon}"></i> ${backLabel}</a>
+      <a href="/" class="btn-navy"><i class="fas fa-home"></i> Home</a>
+    </div>
+  `;
+  document.getElementById('pageContent').insertAdjacentHTML('beforeend', navHtml);
+}
+
+function showError(msg) {
+  document.getElementById('pageContent').innerHTML = `
+    <div class="state-card">
+      <i class="fas fa-exclamation-circle fs-1 text-danger mb-3"></i>
+      <p class="text-danger fw-semibold mb-1">Report generation failed</p>
+      <p class="text-muted mb-0" style="font-size:0.88rem;">${escapeHtml(msg)}</p>
+    </div>`;
+  renderNav();
+}
+
+// Fetch recommendations
+async function fetchRecommendations(patientData) {
+  try {
+    const resp = await fetch('/recommend', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patientData),
+    });
+    const json = await resp.json();
+    if (!json.success) throw new Error(json.message || 'Server error');
+    renderFullReport(json);
+  } catch (err) {
+    showError(err.message || 'Could not connect to recommendation engine.');
+  }
+}
+
+// Helper escape HTML
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+    return c;
+  });
+}
+
+//  Main entry
+(async function init() {
+  const source = '{{ source }}';
+  const sessionId = '{{ session_id }}';
+  if (source === 'ecg') {
+    document.getElementById('headerSubtitle').textContent = 'Based on your clinical profile from the ECG session';
+  }
+  if (source === 'screening') {
+    const raw = localStorage.getItem('screeningResult');
+    if (!raw) { showError('No screening data found. Please complete the pre‑screening form first.'); return; }
+    try {
+      const result = JSON.parse(raw);
+      const pd = result.patient_data || JSON.parse(localStorage.getItem('screeningFormData') || 'null');
+      if (!pd) throw new Error('Missing patient data');
+      await fetchRecommendations(pd);
+    } catch(e) { showError('Could not parse stored screening data.'); }
+    return;
+  }
+  if (source === 'ecg' && sessionId) {
+    try {
+      const resp = await fetch(`/get_screening_data/${sessionId}`);
+      const json = await resp.json();
+      if (!json.success) throw new Error(json.message);
+      await fetchRecommendations(json.patient_data);
+    } catch(e) { showError('Could not retrieve session data from server.'); }
+    return;
+  }
+  showError('Invalid source or missing session ID. Please navigate from the results page.');
+})();
+</script>
+</body>
+</html>
