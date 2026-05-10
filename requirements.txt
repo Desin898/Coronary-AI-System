@@ -1,0 +1,28 @@
+# Core numerical & data handling
+numpy~=2.2.6
+pandas>=2.0,<3.0
+
+# Image processing
+opencv-python>=4.8
+scikit-image>=0.22
+albumentations>=1.4
+pydicom>=2.4,<3.0
+
+# Visualization
+matplotlib~=3.10.7
+seaborn>=0.13
+
+# Machine learning / statistics
+scikit-learn>=1.3
+
+# Signal processing helpers
+scipy>=1.10
+
+# Jupyter / notebook support
+ipykernel
+jupyter
+notebook
+
+# Utility
+tqdm
+cryptography~=42.0.5
