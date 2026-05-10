@@ -1,0 +1,59 @@
+{
+  "rec_label_model": {
+    "test_accuracy": 0.8784530386740331,
+    "test_f1_weighted": 0.829225327567869,
+    "best_params": {
+      "colsample_bytree": 0.5,
+      "gamma": 5.0,
+      "learning_rate": 0.05,
+      "max_depth": 2,
+      "min_child_weight": 10,
+      "n_estimators": 80,
+      "reg_alpha": 5.0,
+      "reg_lambda": 10.0,
+      "subsample": 0.6
+    }
+  },
+  "risk_model": {
+    "test_accuracy": 0.988950276243094,
+    "test_f1": 0.9908256880733946,
+    "test_roc_auc": 0.9998725790010192
+  },
+  "rec_category_models": {
+    "Low_Risk": {
+      "accuracy": 0.988950276243094,
+      "f1": 0.9861111111111112,
+      "roc_auc": 0.9998725790010193
+    },
+    "High_Risk": {
+      "accuracy": 0.988950276243094,
+      "f1": 0.9908256880733946,
+      "roc_auc": 0.9998725790010193
+    },
+    "Smoking_Cessation": {
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "Diet_Cholesterol": {
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "Exercise": {
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "BP_Control": {
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 1.0
+    },
+    "Maintenance": {
+      "accuracy": 1.0,
+      "f1": 1.0,
+      "roc_auc": 0.9999999999999999
+    }
+  }
+}
